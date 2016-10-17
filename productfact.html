@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html ng-app = 'productFact'>
+  <head>
+    <meta charset="utf-8">
+    <title>Product Factory</title>
+    <script src="bower_components/angular/angular.js" charset="utf-8"></script>
+    <script type='text/javascript'>
+      var app = angular.module('productFact', []);
+      app.controller('controlla', function ($scope) {
+        $scope.products = [];
+
+        $scope.addProduct = function() {
+          $scope.products.push($scope.newProduct);
+          $scope.newProduct = {};
+        }
+
+        $scope.deleteProduct = function(index){
+          $scope.products.splice(index, 1);
+        }
+      })
+    </script>
+  </head>
+  <body>
+    <div ng-controller = 'controlla'>
+      <form>
+        Product Name: <input type = 'text' ng-model = 'newProduct.name'><br>
+        Product Price: <input type = 'text' ng-model = 'newProduct.price'><br>
+        <input type = 'submit' value = 'Add Product' ng-click = 'addProduct()'>
+      </form>
+      <table>
+        <tr>
+          <th>Product Name</th>
+          <th>Product Price</th>
+          <th>Remove</th>
+        </tr>
+        <tr ng-repeat = "product in products track by $index">
+          <td>{{ product.name }}</td>
+          <td>{{ product.price }}</td>
+          <td><button ng-click = 'deleteProduct($index)'>Delete Product</button></td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>
