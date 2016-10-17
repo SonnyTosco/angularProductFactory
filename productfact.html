@@ -6,18 +6,42 @@
     <script src="bower_components/angular/angular.js" charset="utf-8"></script>
     <script type='text/javascript'>
       var app = angular.module('productFact', []);
-      app.controller('controlla', function ($scope) {
-        $scope.products = [];
 
-        $scope.addProduct = function() {
-          $scope.products.push($scope.newProduct);
+      app.factory('productFactory', function(){
+        var products = [
+          {name: 'Keyboard', price: 149.99},
+          {name: 'Mouse', price: 59.99},
+          {name: 'Basketball', price: 21.99}
+        ]
+        var factory = {};
+        factory.getProducts = function(){
+          return products;
+        }
+
+        factory.addProduct = function(newProduct){
+          products.push(newProduct);
+        }
+
+        factory.deleteProduct = function(index){
+          products.splice(index, 1);
+        }
+        return factory;
+      })
+
+      app.controller('controlla', ['$scope', 'productFactory', function ($scope, productFactory) {
+        $scope.products = productFactory.getProducts();
+
+        $scope.addProduct = function(){
+          productFactory.addProduct($scope.newProduct);
           $scope.newProduct = {};
         }
-
         $scope.deleteProduct = function(index){
-          $scope.products.splice(index, 1);
+          productFactory.deleteProduct(index);
+          console.log("delete", index);
         }
-      })
+
+      }])
+
     </script>
   </head>
   <body>
@@ -42,3 +66,10 @@
     </div>
   </body>
 </html>
+
+<!-- // Create a controller, that has a factory injected into it
+// Have product price take a number, not a string
+// Store the product list in your factory
+// Create an add method in your factory that will add new products to your factory
+// Create a delete metho in your factory that will remove products from your factory
+// Create an index method in your factory that will return your products -->
